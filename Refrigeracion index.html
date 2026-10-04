@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RefriElite - Refrigeração e Climatização de Elite</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Space Grotesk (Brand Modern Tech) + Rajdhani + JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            brand: ['Space Grotesk', 'sans-serif'],
+            tech: ['Rajdhani', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            refri: {
+              dark: '#010409',
+              card: '#060D1E',
+              accent: '#00F0FF',
+              glow: '#38BDF8',
+              vibrant: '#2563EB',
+              emerald: '#10B981',
+              neonPurple: '#A855F7'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      background-color: #010409;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* FONDO CIBERNÉTICO CON MATRIZ Y DESTELLOS DE LUZ */
+    .bg-cyber-matrix {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      background-color: #010409;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 10% 90%, rgba(37, 99, 235, 0.25) 0%, transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.2) 0%, transparent 50%),
+        radial-gradient(rgba(0, 240, 255, 0.2) 1.5px, transparent 1.5px),
+        linear-gradient(rgba(0, 240, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.06) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px, 56px 58px, 56px 58px;
+      animation: matrixGrid 25s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes matrixGrid {
+      0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+      100% { background-position: 0 0, 0 0, 0 0, 0 28px, 0 58px, 56px 0; }
+    }
+
+    /* PLANETA / MUNDO HOLOGRÁFICO TECH 3D */
+    .tech-globe-container {
+      position: absolute;
+      width: 580px;
+      height: 580px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.38;
+    }
+
+    .tech-globe {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1.5px stroke rgba(0, 240, 255, 0.4);
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.2), inset 0 0 40px rgba(0, 240, 255, 0.2);
+      animation: globeRotate 20s linear infinite;
+    }
+
+    .globe-ring-1 {
+      position: absolute;
+      inset: -20px;
+      border: 1px dashed rgba(0, 240, 255, 0.5);
+      border-radius: 50%;
+      animation: ringSpin1 30s linear infinite;
+    }
+
+    .globe-ring-2 {
+      position: absolute;
+      inset: 40px;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 50%;
+      transform: rotateX(70deg) rotateY(15deg);
+      animation: ringSpin2 18s linear infinite reverse;
+    }
+
+    @keyframes ringSpin1 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes ringSpin2 {
+      0% { transform: rotateX(70deg) rotateY(15deg) rotate(0deg); }
+      100% { transform: rotateX(70deg) rotateY(15deg) rotate(360deg); }
+    }
+
+    /* RAYO LÁSER MÁS LENTO (6.5s) */
+    .laser-scanner {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, transparent, #00F0FF, #ffffff, #00F0FF, transparent);
+      box-shadow: 0 0 18px #00F0FF, 0 0 35px #00F0FF;
+      opacity: 0.75;
+      animation: laserScan 6.5s ease-in-out infinite;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    @keyframes laserScan {
+      0% { top: -2%; opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { top: 102%; opacity: 0; }
+    }
+
+    /* PANTALLA HUD ROBÓTICA */
+    .hud-panel {
+      position: relative;
+      background: rgba(6, 13, 30, 0.93);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.2), inset 0 0 15px rgba(0, 240, 255, 0.12);
+      border-radius: 1.25rem;
+    }
+
+    .hud-panel::before {
+      content: ''; position: absolute; top: -2px; left: -2px;
+      width: 14px; height: 14px;
+      border-top: 3px solid #00F0FF; border-left: 3px solid #00F0FF;
+      pointer-events: none;
+    }
+
+    .hud-panel::after {
+      content: ''; position: absolute; bottom: -2px; right: -2px;
+      width: 14px; height: 14px;
+      border-bottom: 3px solid #00F0FF; border-right: 3px solid #00F0FF;
+      pointer-events: none;
+    }
+
+    /* INPUTS CÁPSULA FUTURISTAS */
+    .pill-container {
+      position: relative; display: flex; align-items: center;
+      background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+      padding: 1px; border-radius: 9999px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .pill-input {
+      width: 100%;
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+      border: 1px solid #00F0FF;
+      border-radius: 9999px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #020617 !important;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 240, 255, 0.25);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .pill-input:focus {
+      outline: none; background: #ffffff; border-color: #00F0FF;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 18px rgba(0, 240, 255, 0.9);
+    }
+
+    .pill-input::placeholder { color: #64748b; font-weight: 400; }
+
+    select.pill-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2000F0FF'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 0.7rem center;
+      background-size: 0.8rem;
+      padding-right: 1.8rem;
+      color: #020617 !important;
+      font-weight: 600;
+    }
+
+    select.pill-input option {
+      background-color: #020617; color: #00F0FF; font-weight: 600;
+    }
+
+    textarea.pill-input { border-radius: 0.85rem; }
+
+    .badge-vibrant {
+      background: rgba(0, 240, 255, 0.15);
+      color: #00F0FF;
+      border: 1px solid rgba(0, 240, 255, 0.6);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+  </style>
+</head>
+<body class="text-slate-100 font-sans min-h-screen antialiased text-xs relative" onclick="closeAllMenus(event)">
+
+  <!-- Fondo Fijo de Matriz Robótica -->
+  <div class="bg-cyber-matrix"></div>
+  <div class="laser-scanner"></div>
+
+  <!-- LOGIN CON MUNDO HOLOGRÁFICO Y TIPOGRAFÍA MODERNA -->
+  <div id="loginScreen" class="h-screen w-screen flex items-center justify-center p-4 relative z-10 overflow-hidden">
+    
+    <!-- EFECTO MUNDO TECNOLÓGICO DE FONDO -->
+    <div class="tech-globe-container">
+      <div class="globe-ring-1"></div>
+      <div class="globe-ring-2"></div>
+      <svg class="tech-globe" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(0, 240, 255, 0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+        <ellipse cx="100" cy="100" rx="95" ry="40" fill="none" stroke="rgba(0, 240, 255, 0.35)" stroke-width="1"/>
+        <ellipse cx="100" cy="100" rx="40" ry="95" fill="none" stroke="rgba(0, 240, 255, 0.35)" stroke-width="1"/>
+        <line x1="5" y1="100" x2="195" y2="100" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1"/>
+        <line x1="100" y1="5" x2="100" y2="195" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <div class="w-full max-w-sm hud-panel p-6 shadow-2xl text-center relative z-20">
+      <div class="mb-5 flex flex-col items-center">
+        
+        <!-- ISOTIPO OFICIAL -->
+        <div class="w-28 h-28 mb-3 drop-shadow-[0_0_35px_rgba(0,240,255,0.95)]">
+          <svg viewBox="0 0 200 200" class="w-full h-full">
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00F0FF" />
+                <stop offset="50%" stop-color="#2563EB" />
+                <stop offset="100%" stop-color="#A855F7" />
+              </linearGradient>
+              <linearGradient id="elementGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#38BDF8" />
+                <stop offset="100%" stop-color="#1D4ED8" />
+              </linearGradient>
+            </defs>
+            <circle cx="100" cy="100" r="92" fill="#020617" stroke="url(#ringGrad)" stroke-width="8"/>
+            <circle cx="100" cy="100" r="85" fill="#060D1E" stroke="#00F0FF" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.8"/>
+
+            <g stroke="url(#elementGrad)" stroke-width="4.5" stroke-linecap="round">
+              <path d="M 100 100 L 60 60 M 60 60 L 60 45 M 60 60 L 45 60" />
+              <path d="M 80 80 L 70 65 M 80 80 L 65 70" />
+              <path d="M 100 100 L 45 100 M 45 100 L 35 88 M 45 100 L 35 112" />
+              <path d="M 70 100 L 60 90 M 70 100 L 60 110" />
+              <path d="M 100 100 L 60 140 M 60 140 L 45 140 M 60 140 L 60 155" />
+              <path d="M 80 120 L 65 130 M 80 120 L 70 135" />
+
+              <path d="M 100 100 L 140 60 M 140 60 L 140 45 M 140 60 L 155 60" />
+              <path d="M 120 80 L 130 65 M 120 80 L 135 70" />
+              <path d="M 100 100 L 155 100 M 155 100 L 165 88 M 155 100 L 165 112" />
+              <path d="M 130 100 L 140 90 M 130 100 L 140 110" />
+              <path d="M 100 100 L 140 140 M 140 140 L 155 140 M 140 140 L 140 155" />
+              <path d="M 120 120 L 135 130 M 120 120 L 130 135" />
+            </g>
+
+            <g fill="url(#ringGrad)" stroke="#00F0FF" stroke-width="1.5">
+              <rect x="94" y="48" width="12" height="104" rx="3" />
+              <path d="M 86 52 C 82 38 90 28 100 28 C 110 28 118 38 114 52 L 108 52 L 108 42 L 92 42 L 92 52 Z" />
+              <path d="M 86 148 C 82 162 90 172 100 172 C 110 172 118 162 114 148 L 108 148 L 108 158 L 92 158 L 92 148 Z" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- NUEVA TIPOGRAFÍA ELEGANTE TECH HIGH-END PARA REFRIELITE -->
+        <h1 class="text-3xl font-extrabold font-brand tracking-wider text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.95)]">
+          REFRI<span class="text-cyan-400">ELITE</span>
+        </h1>
+        <p class="text-cyan-300 text-[10px] font-bold tracking-widest uppercase mt-1 font-tech">
+          Refrigeração e Climatização <span class="font-serif italic text-white lowercase text-xs">de Elite</span>
+        </p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-3.5 text-left">
+        <div>
+          <label class="block text-[8.5px] font-bold text-cyan-300 mb-0.5 uppercase tracking-wider font-mono">E-MAIL DO USUÁRIO</label>
+          <div class="pill-container">
+            <input type="email" required placeholder="usuario@refrielite.com" class="pill-input">
+          </div>
+        </div>
+        <div>
+          <label class="block text-[8.5px] font-bold text-cyan-300 mb-0.5 uppercase tracking-wider font-mono">SENHA DE ACESSO</label>
+          <div class="pill-container">
+            <input type="password" required placeholder="••••••••" class="pill-input">
+          </div>
+        </div>
+        
+        <!-- BOTÓN SIMPLIFICADO: ENTRAR -->
+        <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black py-2.5 rounded-full shadow-lg shadow-cyan-500/50 transition flex items-center justify-center gap-2 mt-4 text-xs active:scale-95 font-brand tracking-widest uppercase">
+          <span>ENTRAR</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PAINEL PRINCIPAL -->
+  <div id="dashboardScreen" class="hidden min-h-screen flex flex-col pb-6 relative z-10">
+    
+    <header class="bg-slate-950/95 border-b border-cyan-500/40 px-5 py-2 sticky top-0 z-40 backdrop-blur-md shadow-2xl shadow-cyan-950/50">
+      <div class="max-w-[1700px] mx-auto flex items-center justify-between gap-4">
+        
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-slate-950 border-2 border-cyan-400 flex items-center justify-center p-0.5 shadow-[0_0_20px_rgba(0,240,255,0.9)]">
+            <svg viewBox="0 0 200 200" class="w-full h-full">
+              <circle cx="100" cy="100" r="90" fill="#020617" stroke="#00F0FF" stroke-width="12"/>
+              <g stroke="#00F0FF" stroke-width="8" stroke-linecap="round">
+                <line x1="100" y1="20" x2="100" y2="180" />
+                <line x1="20" y1="100" x2="180" y2="100" />
+                <line x1="43" y1="47" x2="157" y2="153" />
+                <line x1="157" y1="47" x2="43" y2="153" />
+              </g>
+              <rect x="94" y="30" width="12" height="140" fill="#00F0FF" rx="3"/>
+            </svg>
+          </div>
+          <div>
+            <span class="font-black font-brand text-xl text-white leading-none block tracking-wide drop-shadow-[0_0_12px_rgba(0,240,255,0.8)]">
+              REFRI<span class="text-cyan-400">ELITE</span>
+            </span>
+            <span class="text-[9.5px] text-cyan-300 block font-bold tracking-wide leading-tight mt-0.5 font-serif italic uppercase">
+              Refrigeração e Climatização <span class="font-serif italic text-white lowercase text-[10px]">de Elite</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- MÓDULO DE CLIMA -->
+        <div class="hidden md:flex items-center gap-3 bg-slate-900/90 border border-cyan-500/40 px-4 py-1.5 rounded-full shadow-lg shadow-cyan-950/50">
+          <div class="flex items-center gap-2">
+            <span id="weatherIcon" class="text-base drop-shadow-[0_0_10px_rgba(0,240,255,0.9)]">🌤️</span>
+            <div>
+              <span class="text-[7.5px] text-slate-400 font-bold uppercase tracking-wider block leading-tight font-mono">CLIMA EXTERNO EM TEMPO REAL</span>
+              <span id="weatherData" class="text-[11px] font-bold text-cyan-400 font-mono tracking-tight">
+                Carregando clima...
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="handleLogout()" class="text-[10px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-100 px-3.5 py-1.5 rounded-full border border-slate-700 shadow-md transition active:scale-95 font-serif italic">
+          Sair da Conta
+        </button>
+
+      </div>
+    </header>
+
+    <!-- CORPO PRINCIPAL DO SISTEMA -->
+    <main class="flex-1 px-4 pt-3 pb-2 max-w-[1700px] w-full mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+        
+        <!-- FORMULÁRIO ESQUERDO -->
+        <div class="lg:col-span-3 hud-panel p-3 shadow-2xl">
+          <div class="flex items-center justify-between mb-2 border-b border-slate-800/80 pb-1.5">
+            <h3 id="formTitle" class="text-[11px] font-bold text-white uppercase tracking-wider flex items-center gap-1 font-mono">
+              <span class="text-cyan-400 font-black text-sm">+</span>
+              <span>Novo Registro Técnico</span>
+            </h3>
+            <button type="button" id="cancelEditBtn" onclick="resetForm()" class="hidden bg-slate-800 text-slate-200 text-[8px] px-2 py-0.5 rounded-full border border-slate-700 font-serif italic">
+              Cancelar
+            </button>
+          </div>
+
+          <form id="serviceForm" onsubmit="addOrUpdateService(event)" class="space-y-1.5">
+            <input type="hidden" id="editingId" value="">
+
+            <div>
+              <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">NOME DO CLIENTE</label>
+              <div class="pill-container">
+                <input type="text" id="clientName" required placeholder="Ex. Carlos Mendoza" class="pill-input">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">ENDEREÇO / RUA</label>
+              <div class="pill-container">
+                <input type="text" id="clientAddress" required placeholder="Av. Paulista, São Paulo..." class="pill-input">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1">
+              <div>
+                <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">NÚMERO</label>
+                <div class="pill-container">
+                  <input type="text" id="clientNumber" required placeholder="Ex. 150" class="pill-input">
+                </div>
+              </div>
+              <div>
+                <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">APTO / COMPL</label>
+                <div class="pill-container">
+                  <input type="text" id="clientComplement" placeholder="Apto 42" class="pill-input">
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1">
+              <div>
+                <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">WHATSAPP</label>
+                <div class="pill-container">
+                  <input type="tel" id="clientPhone" required placeholder="11949592605" class="pill-input font-mono">
+                </div>
+              </div>
+              <div>
+                <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">E-MAIL</label>
+                <div class="pill-container">
+                  <input type="email" id="clientEmail" required placeholder="cliente@email.com" class="pill-input">
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1">
+              <div>
+                <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">SERVIÇO</label>
+                <div class="pill-container">
+                  <select id="serviceType" class="pill-input">
+                    <option value="Instalação">Instalação</option>
+                    <option value="Manutenção">Manutenção</option>
+                    <option value="Reparo Técnico">Reparo Técnico</option>
+                    <option value="Carga de Gás">Carga de Gás</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">VALOR (R$)</label>
+                <div class="pill-container">
+                  <input type="number" id="serviceCost" step="0.01" required placeholder="0.00" class="pill-input font-mono font-bold text-cyan-900">
+                </div>
+              </div>
+            </div>
+
+            <!-- MANUTENÇÃO PROGRAMADA -->
+            <div class="p-2 bg-slate-950/90 rounded-xl border border-cyan-500/40 space-y-1">
+              <span class="text-[8px] font-bold text-cyan-400 block uppercase tracking-wider font-mono">MANUTENÇÃO PROGRAMADA</span>
+              <div class="grid grid-cols-2 gap-1">
+                <div>
+                  <label class="block text-[7.5px] font-bold text-slate-300 mb-0.5 uppercase">DATA</label>
+                  <div class="pill-container">
+                    <input type="date" id="serviceDate" required onchange="calculateNextMaintenance()" class="pill-input font-mono text-[10px]">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[7.5px] font-bold text-slate-300 mb-0.5 uppercase">FREQUÊNCIA</label>
+                  <div class="pill-container">
+                    <select id="maintenanceInterval" onchange="calculateNextMaintenance()" class="pill-input text-[10px]">
+                      <option value="3">A cada 3 Meses</option>
+                      <option value="6">A cada 6 Meses</option>
+                      <option value="12">A cada 12 Meses</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[7.5px] font-bold text-amber-300 mb-0.5 uppercase">PRÓXIMA REVISÃO:</label>
+                <div class="pill-container">
+                  <input type="date" id="nextMaintenanceDate" readonly class="pill-input font-mono font-bold text-blue-950 text-[10px]">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[8px] font-bold text-slate-300 mb-0.5 uppercase tracking-wider">OBSERVAÇÕES</label>
+              <div class="pill-container">
+                <textarea id="serviceDetails" rows="1" placeholder="Detalhes do equipamento..." class="pill-input"></textarea>
+              </div>
+            </div>
+
+            <div class="pt-0.5">
+              <button type="submit" id="saveBtn" class="w-full bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 hover:from-blue-500 hover:to-cyan-400 text-white font-black py-2 rounded-full shadow-lg shadow-cyan-500/40 text-[11px] active:scale-95 transition font-serif italic tracking-wide">
+                Salvar e Programar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TABELA DIREITA -->
+        <div class="lg:col-span-9 hud-panel p-3.5 shadow-2xl flex flex-col justify-between overflow-visible min-h-[580px]">
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-2.5 border-b border-slate-800 pb-2.5">
+              <h3 class="text-xs font-bold text-white tracking-wide uppercase font-mono">Histórico e Próximas Manutenções</h3>
+              
+              <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                <div class="flex items-center gap-1 bg-slate-900 border border-cyan-500/40 px-2.5 py-0.5 rounded-full shadow-md">
+                  <span class="text-[8.5px] text-slate-400 font-bold uppercase">Serviços:</span>
+                  <span id="totalServices" class="text-[11px] font-black text-white font-mono">0</span>
+                </div>
+                <div class="flex items-center gap-1 bg-slate-900 border border-cyan-500/40 px-2.5 py-0.5 rounded-full shadow-md">
+                  <span class="text-[8.5px] text-slate-400 font-bold uppercase">Faturado:</span>
+                  <span id="totalAmount" class="text-[11px] font-black text-cyan-400 font-mono">R$ 0,00</span>
+                </div>
+                <div class="flex items-center gap-1 bg-slate-900 border border-cyan-500/40 px-2.5 py-0.5 rounded-full shadow-md">
+                  <span class="text-[8.5px] text-slate-400 font-bold uppercase">Próximos:</span>
+                  <span id="pendingServices" class="text-[11px] font-black text-amber-400 font-mono">0</span>
+                </div>
+
+                <button onclick="exportToGoogleSheets()" class="bg-emerald-950/90 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/50 text-[9.5px] font-bold py-0.5 px-3 rounded-full flex items-center gap-1 transition shadow-lg shadow-emerald-950/50 active:scale-95 font-serif italic">
+                  <svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>
+                  <span>Exportar Planilha</span>
+                </button>
+              </div>
+            </div>
+            
+            <div id="mobileCardsContainer" class="block sm:hidden space-y-2"></div>
+
+            <div class="hidden sm:block overflow-visible min-h-[220px]">
+              <table class="w-full text-left text-xs text-slate-200">
+                <thead class="bg-slate-900/90 text-[9px] uppercase text-cyan-400 border-b border-slate-800 font-bold tracking-wider font-mono">
+                  <tr>
+                    <th class="p-2.5">CLIENTE / LOCALIZAÇÃO</th>
+                    <th class="p-2.5">SERVIÇO</th>
+                    <th class="p-2.5">DATA DO SERVIÇO</th>
+                    <th class="p-2.5">PRÓXIMA MANUTENÇÃO</th>
+                    <th class="p-2.5">VALOR</th>
+                    <th class="p-2.5 text-center">AÇÃO</th>
+                  </tr>
+                </thead>
+                <tbody id="servicesTableBody" class="divide-y divide-slate-800/80"></tbody>
+              </table>
+            </div>
+
+            <div id="emptyMessage" class="text-center py-12 text-slate-400 text-xs font-medium">
+              Nenhum registro encontrado no momento.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let services = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('serviceDate').valueAsDate = new Date();
+      calculateNextMaintenance();
+      fetchLiveWeather();
+    });
+
+    function fetchLiveWeather() {
+      const lat = -23.5505;
+      const lon = -46.6333;
+      
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.current) {
+            const temp = Math.round(data.current.temperature_2m);
+            const humidity = data.current.relative_humidity_2m;
+            const code = data.current.weather_code;
+
+            let icon = "☀️";
+            if (code >= 1 && code <= 3) icon = "🌤️";
+            else if (code >= 45 && code <= 48) icon = "🌫️";
+            else if (code >= 51) icon = "🌧️";
+
+            document.getElementById('weatherIcon').innerText = icon;
+            document.getElementById('weatherData').innerText = `São Paulo: ${temp}°C • Umidade ${humidity}%`;
+          }
+        })
+        .catch(() => {
+          document.getElementById('weatherIcon').innerText = "🌤️";
+          document.getElementById('weatherData').innerText = "São Paulo: 24°C • Umidade 62%";
+        });
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.remove('hidden');
+    }
+
+    function handleLogout() {
+      document.getElementById('dashboardScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function calculateNextMaintenance() {
+      const dateInput = document.getElementById('serviceDate').value;
+      const monthsToAdd = parseInt(document.getElementById('maintenanceInterval').value);
+
+      if (dateInput) {
+        const currentDate = new Date(dateInput);
+        currentDate.setMonth(currentDate.getMonth() + monthsToAdd);
+        document.getElementById('nextMaintenanceDate').value = currentDate.toISOString().split('T')[0];
+      }
+    }
+
+    function addOrUpdateService(e) {
+      e.preventDefault();
+      const editingId = document.getElementById('editingId').value;
+      
+      const street = document.getElementById('clientAddress').value;
+      const number = document.getElementById('clientNumber').value;
+      const comp = document.getElementById('clientComplement').value;
+      
+      const fullAddress = `${street}, Nº ${number}${comp ? ' (' + comp + ')' : ''}`;
+
+      const serviceData = {
+        name: document.getElementById('clientName').value,
+        street: street,
+        number: number,
+        complement: comp,
+        address: fullAddress,
+        phone: document.getElementById('clientPhone').value,
+        email: document.getElementById('clientEmail').value,
+        type: document.getElementById('serviceType').value,
+        cost: parseFloat(document.getElementById('serviceCost').value),
+        serviceDate: document.getElementById('serviceDate').value,
+        maintenanceInterval: document.getElementById('maintenanceInterval').value,
+        nextMaintenanceDate: document.getElementById('nextMaintenanceDate').value,
+        details: document.getElementById('serviceDetails').value
+      };
+
+      if (editingId) {
+        const index = services.findIndex(s => s.id == editingId);
+        if (index !== -1) services[index] = { id: Number(editingId), ...serviceData };
+      } else {
+        services.push({ id: Date.now(), ...serviceData });
+      }
+
+      resetForm();
+      updateUI();
+    }
+
+    function editService(id) {
+      const item = services.find(s => s.id === id);
+      if (!item) return;
+
+      document.getElementById('editingId').value = item.id;
+      document.getElementById('clientName').value = item.name;
+      document.getElementById('clientAddress').value = item.street || item.address || "";
+      document.getElementById('clientNumber').value = item.number || "";
+      document.getElementById('clientComplement').value = item.complement || "";
+      document.getElementById('clientPhone').value = item.phone;
+      document.getElementById('clientEmail').value = item.email;
+      document.getElementById('serviceType').value = item.type;
+      document.getElementById('serviceCost').value = item.cost;
+      document.getElementById('serviceDate').value = item.serviceDate;
+      document.getElementById('maintenanceInterval').value = item.maintenanceInterval || "3";
+      document.getElementById('nextMaintenanceDate').value = item.nextMaintenanceDate;
+      document.getElementById('serviceDetails').value = item.details || "";
+
+      document.getElementById('formTitle').innerText = "Modificar Serviço";
+      document.getElementById('saveBtn').innerText = "Atualizar";
+      document.getElementById('cancelEditBtn').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+      document.getElementById('editingId').value = "";
+      document.getElementById('serviceForm').reset();
+      document.getElementById('serviceDate').valueAsDate = new Date();
+      calculateNextMaintenance();
+      document.getElementById('formTitle').innerText = "Novo Registro Técnico";
+      document.getElementById('saveBtn').innerText = "Salvar e Programar";
+      document.getElementById('cancelEditBtn').classList.add('hidden');
+    }
+
+    function deleteService(id) {
+      if (confirm("Deseja realmente excluir este serviço?")) {
+        services = services.filter(s => s.id !== id);
+        updateUI();
+      }
+    }
+
+    function openWhatsApp(phone, name, nextDate) {
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      const message = encodeURIComponent(`Olá ${name}, somos da RefriElite. Lembrando que a data agendada para sua próxima manutenção de climatização é ${nextDate}. Deseja confirmar a visita?`);
+      window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
+    }
+
+    function toggleMenu(event, id) {
+      event.stopPropagation();
+      closeAllMenus();
+      const menu = document.getElementById(`menu-${id}`);
+      const menuMob = document.getElementById(`menu-mob-${id}`);
+      if (menu) menu.classList.toggle('hidden');
+      if (menuMob) menuMob.classList.toggle('hidden');
+    }
+
+    function closeAllMenus(e) {
+      document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
+    }
+
+    function updateUI() {
+      const tbody = document.getElementById('servicesTableBody');
+      const mobileCards = document.getElementById('mobileCardsContainer');
+      const emptyMsg = document.getElementById('emptyMessage');
+      
+      tbody.innerHTML = '';
+      mobileCards.innerHTML = '';
+
+      if (services.length === 0) {
+        emptyMsg.classList.remove('hidden');
+      } else {
+        emptyMsg.classList.add('hidden');
+      }
+
+      let total = 0;
+
+      services.forEach(item => {
+        total += item.cost;
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-800/60 transition relative";
+        tr.innerHTML = `
+          <td class="p-2.5">
+            <span class="font-bold text-white block text-xs">${item.name}</span>
+            <span class="text-[9.5px] text-slate-300 font-mono block">${item.phone}</span>
+            <span class="text-[8.5px] text-cyan-400 block truncate max-w-[280px]" title="${item.address}">📍 ${item.address}</span>
+          </td>
+          <td class="p-2.5">
+            <span class="inline-block badge-vibrant text-[9.5px] font-bold px-2 py-0.5 rounded-full">
+              ${item.type}
+            </span>
+          </td>
+          <td class="p-2.5 text-[10px] font-mono text-slate-200">${item.serviceDate}</td>
+          <td class="p-2.5 text-[10px] font-mono text-amber-300 font-bold">${item.nextMaintenanceDate}</td>
+          <td class="p-2.5 font-mono text-cyan-400 font-bold text-xs">R$ ${item.cost.toFixed(2)}</td>
+          <td class="p-2.5 text-center relative">
+            <button onclick="toggleMenu(event, ${item.id})" class="p-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </button>
+
+            <div id="menu-${item.id}" class="dropdown-menu hidden absolute right-0 bottom-auto top-7 w-40 bg-slate-900 border border-cyan-500/40 rounded-xl shadow-2xl z-50 text-left py-1 text-[10px]">
+              <button onclick="editService(${item.id})" class="w-full px-2.5 py-1.5 text-slate-200 hover:bg-slate-800 flex items-center gap-2 font-serif italic">
+                <svg class="w-3 h-3 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                <span>Editar / Modificar</span>
+              </button>
+
+              <button onclick="openWhatsApp('${item.phone}', '${item.name}', '${item.nextMaintenanceDate}')" class="w-full px-2.5 py-1.5 text-emerald-400 hover:bg-slate-800 flex items-center gap-2 font-bold font-serif italic">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                <span>Enviar WhatsApp</span>
+              </button>
+
+              <div class="border-t border-slate-800 my-1"></div>
+
+              <button onclick="deleteService(${item.id})" class="w-full px-2.5 py-1.5 text-rose-400 hover:bg-slate-800 flex items-center gap-2 font-serif italic">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                <span>Excluir Serviço</span>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        const card = document.createElement('div');
+        card.className = "bg-slate-900 border border-cyan-500/30 p-2.5 rounded-xl space-y-1 relative shadow-md";
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <h4 class="font-bold text-white text-xs">${item.name}</h4>
+              <p class="text-[9px] text-slate-300 font-mono">${item.phone}</p>
+              <p class="text-[9px] text-cyan-400 mt-0.5">📍 ${item.address}</p>
+            </div>
+            <button onclick="toggleMenu(event, ${item.id})" class="p-1 rounded text-slate-300 bg-slate-800">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </button>
+            <div id="menu-mob-${item.id}" class="dropdown-menu hidden absolute right-2 top-7 w-40 bg-slate-950 border border-slate-700 rounded-xl shadow-2xl z-50 text-left py-1 text-[10px]">
+              <button onclick="editService(${item.id})" class="w-full px-2.5 py-1.5 text-slate-200 hover:bg-slate-800 flex items-center gap-2 font-serif italic">Editar / Modificar</button>
+              <button onclick="openWhatsApp('${item.phone}', '${item.name}', '${item.nextMaintenanceDate}')" class="w-full px-2.5 py-1.5 text-emerald-400 hover:bg-slate-800 flex items-center gap-2 font-bold font-serif italic">Enviar WhatsApp</button>
+              <div class="border-t border-slate-800 my-1"></div>
+              <button onclick="deleteService(${item.id})" class="w-full px-2.5 py-1.5 text-rose-400 hover:bg-slate-800 flex items-center gap-2 font-serif italic">Excluir Serviço</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-800">
+            <span class="inline-block badge-vibrant text-[9px] font-bold px-2 py-0.5 rounded-full">${item.type}</span>
+            <span class="font-mono text-cyan-400 font-bold text-xs">R$ ${item.cost.toFixed(2)}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-1 text-[9px] bg-slate-950/60 p-1 rounded-lg border border-slate-800 font-mono">
+            <div>
+              <span class="text-slate-400 block text-[7.5px] uppercase">Data Serviço</span>
+              <span class="text-slate-200">${item.serviceDate}</span>
+            </div>
+            <div>
+              <span class="text-amber-400 block text-[7.5px] uppercase font-bold">Próx. Revisão</span>
+              <span class="text-amber-300 font-bold">${item.nextMaintenanceDate}</span>
+            </div>
+          </div>
+        `;
+        mobileCards.appendChild(card);
+      });
+
+      document.getElementById('totalServices').innerText = services.length;
+      document.getElementById('pendingServices').innerText = services.length;
+      document.getElementById('totalAmount').innerText = `R$ ${total.toFixed(2)}`;
+    }
+
+    function exportToGoogleSheets() {
+      if (services.length === 0) {
+        alert("Nenhum registro para exportar.");
+        return;
+      }
+
+      let csvContent = "Cliente,Endereco,Telefone,Email,Tipo_Servico,Data_Servico,Proxima_Manutencao,Valor_BRL,Observacoes\n";
+
+      services.forEach(s => {
+        const cleanName = (s.name || '').replace(/[",']/g, '');
+        const cleanAddress = (s.address || '').replace(/[",']/g, '');
+        const cleanPhone = (s.phone || '').replace(/[^0-9]/g, '');
+        const cleanEmail = (s.email || '').replace(/[",']/g, '');
+        const cleanType = (s.type || '').replace(/[",']/g, '');
+        const cleanDetails = (s.details || '').replace(/[\r\n",']/g, ' ');
+
+        const formattedServiceDate = s.serviceDate ? s.serviceDate : '';
+        const formattedNextDate = s.nextMaintenanceDate ? s.nextMaintenanceDate : '';
+        const formattedCost = s.cost ? s.cost.toFixed(2) : "0.00";
+
+        let row = `"${cleanName}","${cleanAddress}","${cleanPhone}","${cleanEmail}","${cleanType}","${formattedServiceDate}","${formattedNextDate}",${formattedCost},"${cleanDetails}"`;
+        csvContent += row + "\n";
+      });
+
+      const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `RefriElite_Manutencoes_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
